@@ -1,0 +1,31 @@
+name: OpenAPI drift
+
+# The demo: openapi.yaml drifts from src/ in five places on purpose. The action reports them (job summary) and
+# the next step checks that exactly five were found, so this workflow is green when the tool works.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: drift
+        uses: vannt-dev/openapi-drift@v0
+        with:
+          spec: openapi.yaml
+          source: src
+          prefix: /api
+          fail-on: none # report only; a real project uses `any` so the job fails on drift
+      - name: Exactly the five deliberate drifts
+        env:
+          DRIFTS: ${{ steps.drift.outputs.drifts }}
+        run: |
+          echo "drifts found: $DRIFTS"
+          test "$DRIFTS" = "5"

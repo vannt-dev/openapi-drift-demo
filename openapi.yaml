@@ -1,0 +1,100 @@
+openapi: 3.0.3
+info:
+  title: Shop API (demo for openapi-drift)
+  version: 1.0.0
+  description: |
+    This document drifts from src/ on purpose, in five places:
+      1. DELETE /users/{id} is served by the code and not described here
+      2. GET /health is served by the code and not described here
+      3. GET /users/{id}/avatar is described here and served by nothing
+      4. POST /orders is described here and served by nothing
+      5. PATCH /orders/{orderId} is described here and served by nothing
+    GET /orders/{id}/items is the same route as the code's :orderId: noted, not a drift.
+servers:
+  - url: https://api.example.com/api
+paths:
+  /users:
+    get:
+      operationId: listUsers
+      responses:
+        '200':
+          description: ok
+    post:
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: created
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getUser
+      responses:
+        '200':
+          description: ok
+    patch:
+      operationId: updateUser
+      responses:
+        '200':
+          description: ok
+  /users/{id}/avatar:
+    get:
+      operationId: getAvatar
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+  /orders:
+    get:
+      operationId: listOrders
+      responses:
+        '200':
+          description: ok
+    post:
+      operationId: createOrder
+      responses:
+        '201':
+          description: created
+  /orders/{id}/items:
+    get:
+      operationId: listOrderItems
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+  /orders/{orderId}:
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      operationId: replaceOrder
+      responses:
+        '200':
+          description: ok
+    patch:
+      operationId: updateOrder
+      responses:
+        '200':
+          description: ok
