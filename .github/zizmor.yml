@@ -1,0 +1,14 @@
+rules:
+  # A cooldown would hold back every version update; whether to have one is the owner's choice.
+  dependabot-cooldown:
+    ignore:
+      - dependabot.yml
+  unpinned-uses:
+    config:
+      policies:
+        # The workflow-lint caller follows the v0 tag of repokeeper's workflows, moved on purpose
+        # by each repokeeper release.
+        vannt-dev/repokeeper/*: ref-pin
+        # The demo shows the action as its users call it, `vannt-dev/openapi-drift@v0`, and follows
+        # that tag so it always runs the latest v0 release.
+        vannt-dev/openapi-drift: ref-pin
